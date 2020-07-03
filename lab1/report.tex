@@ -1,0 +1,440 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[T2A]{fontenc}  
+\usepackage[utf8]{inputenc} 
+\usepackage[english,russian]{babel} 
+\usepackage{color}    
+\usepackage{float}
+
+\usepackage[top=20mm, bottom=20mm, left=30mm, right=15mm]{geometry}
+
+\usepackage{amsmath, amsfonts, amssymb, mathtools} 
+
+\usepackage{amsthm}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Определение}[section]
+\newtheorem*{rem}{Замечание}
+\usepackage{graphicx}
+
+\graphicspath{{img/}{../../graphics/}}
+
+% Математическое ожидание\
+\newcommand{\Expect}{%
+	\mathsf{M}}
+
+\renewcommand{\Variance}{%
+	\mathsf{D}}
+
+% Математическое ожидание
+\newcommand{\m}[1]{%
+	\ensuremath{M\!#1}}
+
+% Математическое ожидание X
+\newcommand{\mx}{%
+	\ensuremath{M\!X}}
+
+\newcommand{\mxx}{%
+	\ensuremath{M\!X^2}}
+
+% Математическое ожидание Y
+\newcommand{\my}{%
+	\ensuremath{M\!Y}}
+
+\newcommand{\myy}{%
+	\ensuremath{M\!Y^2}}
+
+% Дисперсия
+\newcommand{\disp}[1]{%
+	\ensuremath{D\!#1}}
+
+% Дисперсия X
+\newcommand{\dx}{%
+	\ensuremath{D\!X}}
+
+% Дисперсия Y
+\newcommand{\dy}{%
+	\ensuremath{D\!Y}}
+
+% Следовательно
+\newcommand{\Rarrow}{%
+	\ensuremath{\;\Rightarrow\;}}
+
+% Бесконечная последовательность 
+\newcommand{\infseq}[3]{%
+	\ensuremath{#1_#2, \dots, #1_#3, \dots}\ }
+
+% Бесконечная последовательность X_1, ... X_n, ...
+\newcommand{\infseqX}{%
+	\infseq{X}{1}{n}}
+
+\usepackage{listings, listingsutf8}
+
+\lstset{
+	language = Matlab,
+	numbers=left,   
+	frame=single,    
+	basicstyle=\small,
+    escapebegin=\begin{russian}\commentfont,
+    escapeend=\end{russian},
+    breaklines=true,   
+    breakatwhitespace=true,
+	literate={а}{{\selectfont\char224}}1
+	{б}{{\selectfont\char225}}1
+	{в}{{\selectfont\char226}}1
+	{г}{{\selectfont\char227}}1
+	{д}{{\selectfont\char228}}1
+	{е}{{\selectfont\char229}}1
+	{ё}{{\"e}}1
+	{ж}{{\selectfont\char230}}1
+	{з}{{\selectfont\char231}}1
+	{и}{{\selectfont\char232}}1
+	{й}{{\selectfont\char233}}1
+	{к}{{\selectfont\char234}}1
+	{л}{{\selectfont\char235}}1
+	{м}{{\selectfont\char236}}1
+	{н}{{\selectfont\char237}}1
+	{о}{{\selectfont\char238}}1
+	{п}{{\selectfont\char239}}1
+	{р}{{\selectfont\char240}}1
+	{с}{{\selectfont\char241}}1
+	{т}{{\selectfont\char242}}1
+	{у}{{\selectfont\char243}}1
+	{ф}{{\selectfont\char244}}1
+	{х}{{\selectfont\char245}}1
+	{ц}{{\selectfont\char246}}1
+	{ч}{{\selectfont\char247}}1
+	{ш}{{\selectfont\char248}}1
+	{щ}{{\selectfont\char249}}1
+	{ъ}{{\selectfont\char250}}1
+	{ы}{{\selectfont\char251}}1
+	{ь}{{\selectfont\char252}}1
+	{э}{{\selectfont\char253}}1
+	{ю}{{\selectfont\char254}}1
+	{я}{{\selectfont\char255}}1
+	{А}{{\selectfont\char192}}1
+	{Б}{{\selectfont\char193}}1
+	{В}{{\selectfont\char194}}1
+	{Г}{{\selectfont\char195}}1
+	{Д}{{\selectfont\char196}}1
+	{Е}{{\selectfont\char197}}1
+	{Ё}{{\"E}}1
+	{Ж}{{\selectfont\char198}}1
+	{З}{{\selectfont\char199}}1
+	{И}{{\selectfont\char200}}1
+	{Й}{{\selectfont\char201}}1
+	{К}{{\selectfont\char202}}1
+	{Л}{{\selectfont\char203}}1
+	{М}{{\selectfont\char204}}1
+	{Н}{{\selectfont\char205}}1
+	{О}{{\selectfont\char206}}1
+	{П}{{\selectfont\char207}}1
+	{Р}{{\selectfont\char208}}1
+	{С}{{\selectfont\char209}}1
+	{Т}{{\selectfont\char210}}1
+	{У}{{\selectfont\char211}}1
+	{Ф}{{\selectfont\char212}}1
+	{Х}{{\selectfont\char213}}1
+	{Ц}{{\selectfont\char214}}1
+	{Ч}{{\selectfont\char215}}1
+	{Ш}{{\selectfont\char216}}1
+	{Щ}{{\selectfont\char217}}1
+	{Ъ}{{\selectfont\char218}}1
+	{Ы}{{\selectfont\char219}}1
+	{Ь}{{\selectfont\char220}}1
+	{Э}{{\selectfont\char221}}1
+	{Ю}{{\selectfont\char222}}1
+	{Я}{{\selectfont\char223}}1
+}
+
+\newcommand{\biglisting}[1]{%
+	\lstinputlisting[numbers=left]{#1}%
+}
+
+\begin{document}
+
+\section{Постановка задачи}
+
+\paragraph{Цель работы:} построение гистограммы и эмпирической функции распределения.
+
+\paragraph{Содержание работы}
+
+\begin{enumerate}
+	\item Для выборки объёма $n$ из генеральной совокупности $X$ реализовать в виде программы на ЭВМ
+	\begin{enumerate}
+		\item вычисление максимального значения $M_{\max}$ и минимального значения $M_{\min}$;
+		\item вычисление размаха $R$ выборки;
+		\item вычисление оценок $\hat{\mu}$ и $S^2$ математического ожидания $\Expect X$ и дисперсии $\Variance X$;
+		\item группировку значений выборки в $m = [\log_2 n] + 2$ интервала;
+		\item построение на одной координатной плоскости гистограммы и графика функции плотности распределения вероятностей нормальной случайной величины с математическим ожиданием $\hat{\mu}$ и дисперсией $S^2$;
+		\item построение на другой координатной плоскости графика эмпирической функции распределения и функции распределения нормальной случайной величины с математическим ожиданием $\hat{\mu}$ и дисперсией $S^2$.
+	\end{enumerate}
+	\item Провести вычисления и построить графики для выборки из индивидуального варианта.
+\end{enumerate}
+\newpage
+\section{Отчет}
+
+\subsection{Формулы для вычисления величин}
+
+\paragraph{Количество интервалов}
+\begin{equation}
+m = [\log_2 n] + 2
+\end{equation}
+
+
+\paragraph{Минимальное значение выборки}
+
+\begin{equation}
+M_{\min} = \min \{ x_1, \dots, x_n\}, \quad \text{где}
+\end{equation}
+\begin{itemize}
+	\item $(x_1, \dots, x_n)$ --- реализация случайной выборки.
+\end{itemize}
+
+
+\paragraph{Максимальное значение выборки}
+
+\begin{equation}
+M_{\max} = \max \{ x_1, \dots, x_n\}, \quad \text{где}
+\end{equation}
+\begin{itemize}
+	\item $(x_1, \dots, x_n)$ --- реализация случайной выборки.
+\end{itemize}
+
+
+\paragraph{Размах выборки}
+
+\begin{equation}
+R = M_{\max} - M_{\min}, \quad \text{где}
+\end{equation}
+\begin{itemize}
+	\item $M_{\max}$ --- максимальное значение выборки;
+	\item $M_{\min}$ --- минимальное значение выборки.
+\end{itemize}
+
+
+\paragraph{Оценка математического ожидания}
+
+\begin{equation}
+\hat{\mu}(\vec{X}) = \overline{X} = \frac{1}{n} \sum_{i = 1}^{n} X_i\,.
+\end{equation}
+
+
+\paragraph{Несмещенная оценка дисперсии}
+
+\begin{equation}
+S^2(\vec{X}) = \frac{n}{n - 1}\hat{\sigma}^2(\vec{X}) = \frac{1}{n - 1}\sum_{i = 1}^{n} (X_i - \overline{X})^2\,.
+\end{equation}
+
+
+\subsection{Эмпирическая плотность и гистограмма}
+
+	\emph{Эмпирической плотностью распределения  выборки $\vec{x}$} называют функцию
+	\begin{equation}
+	f_n(x) =
+	\begin{cases}
+	\frac{n_i}{n \, \Delta}, &x \in J_i,\; i = \overline{1, m};\\
+	0, &\text{иначе}.
+	\end{cases}, \quad \text{где}
+	\end{equation}
+	\begin{itemize}
+		\item $J_i,\, i = \overline{1; m}$, --- полуинтервал из $J = [x_{(1)}, x_{(n)}]$, где 
+		\begin{align}
+		&x_{(1)} = \min\{ x_1, \dots, x_n \}, &x_{(n)} = \max\{ x_1, \dots, x_n \};
+		\end{align}
+		при этом все полуинтервалы, кроме последнего, не содержат правую границу т.\,е.
+		\begin{align}
+		&J_i = [ x_{(1)} + (i-1)\Delta, x_{(1)} + i\Delta), \quad i = \overline{1, m-1};
+		\\
+		&J_m = [ x_{(1)} + (m-1)\Delta, x_{(1)} + m\Delta];
+		\end{align}
+		\item $m$ --- количество полуинтервалов интервала $J = [x_{(1)}, x_{(n)}]$;
+		\item $\Delta$ --- длина полуинтервала $J_i$, $i = \overline{1, m}$ равная
+		\begin{equation}
+		\Delta = \frac{x_{(n)} - x_{(1)}}{m} = \frac{|J|}{m};
+		\end{equation}
+		\item $n_i$ --- количество элементов выборки в полуинтервале $J_i$, $i = \overline{1, m}$;
+		\item $n$ --- количество элементов в выборке.
+		
+	\end{itemize}
+
+	График функции $f_n(x)$ называют \emph{гистограммой}. Гистограмма представляет собой кусочно-постоянную функцию на промежутке $J$.
+
+\subsection{Эмпирическая функция распределения}
+
+	\emph{Эмпирической функцией распределения, отвечающей выборке $\vec{x}$} называют функцию
+	\begin{equation}
+	F_n\colon \mathbb{R} \to \mathbb{R}, \qquad F_n(x) = \frac{n(x, \vec{x})}{n},
+	\end{equation} 
+	где $n(x, \vec{x})$ --- количество элементов выборки $\vec{x}$, которые меньше $x$.
+	
+\begin{rem}
+    $F_n(x)$ обладает всеми свойствами функции распределения. При этом она кусочно-постоянна и принимает значения 
+    \[
+        0, \frac{1}{n}, \frac{2}{n}, \ldots, \frac{(n-1)}{n}, 1
+    \]
+\end{rem}
+\begin{rem}
+    Если все элементы вектора $\vec{x}_n$ различны, то
+    \begin{equation}
+        F_n(x) = 
+        \begin{cases}
+            0, & x \leq x_{(1)}; \\
+            \frac{i}{n}, & x_{(i)} < x \leq x_{(i+1)},\; i = \overline{1, n-1}; \\
+            1, & x > x_{(n)}.
+        \end{cases}
+    \end{equation}
+\end{rem}
+\begin{rem}
+    Эмпирическая функция распределения позволяет интерпретировать выборку $\vec{x}_n$ как реализацию дискретной случайной величины $\widetilde{X}$ ряд распределения которой
+    \begin{center}
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{| c || c | c | c |}
+            \hline
+            $\widetilde{X}$ & $x_{(1)}$ & \ldots & $x_{(n)}$ \\
+            \hline
+            $\Prob$ & $1/n$ & \ldots & $1/n$ \\
+            \hline
+        \end{tabular}
+    \end{center}
+    Это позволяет рассматривать числовые характеристики случайной величины $\widetilde{X}$ как приближённые значения числовых характеристик случайной величины $X$.
+\end{rem}
+
+\newpage
+\section{Листинг программы}
+
+\begin{lstlisting}
+function lab1()
+    % Выборка объема n из генеральной совокупности Х
+    X = [-1.12,-1.06,0.46,-0.39,0.09,-1.44,-1.64,0.86,-0.24,-1.71, ...
+        -0.84,-1.19,-0.84,-0.55,-1.11,-1.84,-0.60,-0.92,-0.69,0.23, ...
+        0.51,-2.41,-0.53,-1.41,-0.23,-0.89,-0.13,-1.50,0.02,0.27, ...
+        -0.75,-0.06,-0.48,0.14,0.20,-2.22,-1.42,-0.54,0.83,-1.77, ...
+        -0.10,-0.07,-0.94,-0.13,-1.76,-0.77,-1.26,-0.29,-1.11, ...
+        -0.56,1.19,-0.92,-2.02,-1.94,-0.36,-2.09,-2.51,-1.82,0.39, ...
+        -2.08,-0.60,-1.38,-1.12,-0.34,0.77,-1.34,0.24,-0.30,-1.67, ...
+        -1.50,-0.77,-0.10,-0.39,-0.35,-2.23,-0.84,-0.85,-0.44,-0.20, ...
+        -1.76,-0.91,-1.30,-2.03,-2.50,1.08,0.19,0.03,1.17,-0.05, ...
+        -2.88,-1.13,-0.05,-1.37,-0.22,0.88,-1.04,-0.52,-1.64,-0.43, ...
+        -0.09,-2.44,-0.78,-2.48,-1.16,-0.44,-0.34,-0.60,-0.11,-0.41, ...
+        -0.04,-1.09,-1.81,-0.74,-1.07,-1.07,-0.68,-0.36,-0.65,-1.72, ...
+        -0.49];
+    
+    % Минимальное значение
+    Mmin = min(X);
+    fprintf('Mmin = %f\n', Mmin);
+    
+    % Максимальное значение
+    Mmax = max(X);
+    fprintf('Mmax = %f\n', Mmax);
+    
+    % Размах выборки
+    R = Mmax - Mmin;
+    fprintf('R = %f\n', R);
+    
+    % Выборочное среднее
+    mu = mean(X);
+    fprintf('mu = %f\n', mu);
+    
+    % Несмещенная оценка дисперсии
+    s2 = var(X);
+    fprintf('S2 = %f\n', s2);
+
+    % Нахождение количества интервалов
+    m = floor(log2(length(X))) + 2;
+    
+    % Разбиваем выборку на m интервалов от min до max
+    [count, edges] = histcounts(X, m, 'BinLimits', [min(X), max(X)]);
+    countLen = length(count);
+    
+    % Интервалы и количество элементов в них
+    fprintf('\nИнтервальная группировка значений выборки при m = %d \n', m);
+    for i = 1 : (countLen - 1)
+        fprintf('[%f : %f) - %d\n', edges(i), edges(i + 1), count(i));
+    end
+    fprintf('[%f : %f] - %d\n', edges(countLen), edges(countLen + 1), count(countLen));
+    
+    % Гистограмма
+    plotHistogram(X, count, edges, m);
+    hold on; 
+    % График функции плотности распределения вероятностей нормальной случайной величины
+    f(X, mu, s2, m, R);
+    figure;
+    % График эмпирической функции распределения
+    plotEmpiricalF(X);
+    hold on;
+    % График функции распределения нормальной случайной величины
+    F(sort(X), mu, s2, m, R);
+    
+function plotHistogram(X, count, edges, m)
+    h = histogram();
+    h.BinEdges = edges;
+    h.BinCounts = count / length(X) / ((max(X) - min(X)) / m);
+end
+
+function f(X, MX, DX, m, R)
+        delta = R/m;
+        sigma = sqrt(DX);
+        Xn = min(X):delta/20:max(X);
+        Y = normpdf(Xn, MX, sigma);
+        plot(Xn, Y, 'red');
+end
+
+function F(X, MX, DX, m, R)
+        delta = R/m;
+        Xn = min(X):delta/20:max(X);
+        Y = 1/2 * (1 + erf((Xn - MX) / sqrt(2*DX))); 
+        plot(Xn, Y, 'red');
+end
+
+function plotEmpiricalF(X)  
+        [yy, xx] = ecdf(X);
+        stairs(xx, yy);
+end
+
+end
+\end{lstlisting}
+
+\section{Результаты расчётов}
+
+
+Mmin = -2.880000 \\
+Mmax = 1.190000 \\
+R = 4.070000 \\
+mu = -0.771000 \\
+S2 = 0.752555 \\
+
+
+\begin{figure}[H]
+        		\includegraphics[scale=0.8]{m}
+        		\label{fig:g1}
+        \end{figure}
+
+
+\section{Графики}
+
+\subsection{Гистограмма и график функции плотности распределения вероятностей нормальной случайной величины с математическим ожиданием $\hat{\mu}$ и дисперсией $S^2$}
+
+На рис. \ref{fig:g1} представлена гистограмма и график функции плотности распределения вероятностей:
+	
+	\begin{figure}[H]
+        	\begin{center}
+        		\includegraphics[scale=0.8]{g1}
+        		\caption{Гистограмма и график функции плотности распределения вероятностей}
+        		\label{fig:g1}
+        	\end{center}
+        \end{figure}
+
+\newpage
+\subsection{График эмпирической функции распределения и функции распределения нормальной случайной величины с математическим ожиданием $\hat{\mu}$ и дисперсией $S^2$}
+
+На рис. \ref{fig:g2} представлен график эмпирической функции распределения и функции распределения:
+	
+	\begin{figure}[H]
+        	\begin{center}
+        		\includegraphics[scale=0.8]{g2}
+        		\caption{График эмпирической функции распределения и функции распределения}
+        		\label{fig:g2}
+        	\end{center}
+        \end{figure}
+
+\end{document}
